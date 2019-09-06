@@ -21,4 +21,6 @@ app.get('/users', function (req, res) {
     res.send(users);
 });
 
-app.listen(PORT);
+app.listen(PORT, function () {
+    console.log("server running on port: ", PORT);
+});
