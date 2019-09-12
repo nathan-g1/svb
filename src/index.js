@@ -1,6 +1,6 @@
 var express = require("express");
 var app = express();
-var PORT = 3001;
+const PORT = process.env.PORT;
 
 app.get('/', function (req, res) {
     res.send('Hello There');
@@ -27,5 +27,5 @@ app.get('/shipment', function (req, res) {
 });
 
 app.listen(PORT, function () {
-    console.log("server running on port: ", PORT);
+    console.log(`server running on port: ${PORT}`);
 });
