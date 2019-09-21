@@ -27,26 +27,36 @@ router.post('/signup', async (req, res) => {
         image: req.body.image,
     });
     try {
-        const newUser = await User.save(user);
+        const newUser = await user.save(user);
         res.json(newUser);
     } catch (err) {
         res.json({ message: err });
     }
 });
 
+
+
+
+
+
 router.post('/login', async (req, res) => {
     // send a token id to the Browser
     // consider including JWT for auth 
-    const user = new user({
+    const user = new User({
         name: req.body.name,
         email: req.body.email,
     });
     try {
-        const oldUser = await User.save(user);
+        const oldUser = await user.save(user);
         res.json(oldUser);
     } catch (err) {
         res.json({ message: err });
     }
 });
+
+
+
+
+
 
 module.exports = router;
