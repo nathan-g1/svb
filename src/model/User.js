@@ -4,6 +4,10 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    password: {
+        type: String,
+        required: true,
+    },
     email: {
         type: String,
         required: true
@@ -14,7 +18,9 @@ const UserSchema = mongoose.Schema({
     },
     type: {
         type: String,
-        required: true
+        required: true,
+        default: "ptn"
+        // user types ptn, adm, phy
     },
     phone: {
         type: Boolean,
@@ -30,4 +36,4 @@ const UserSchema = mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Products', UserSchema);
+module.exports = mongoose.model('Users', UserSchema);
