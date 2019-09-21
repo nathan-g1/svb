@@ -23,7 +23,7 @@ const UserSchema = mongoose.Schema({
         // user types ptn, adm, phy
     },
     phone: {
-        type: Boolean,
+        type: String,
         required: true
     },
     image: {
