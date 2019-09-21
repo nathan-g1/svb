@@ -18,7 +18,7 @@ router.get('/:id', (req, res) => {
 router.post('/signup', async (req, res) => {
     // remember to handle input values
     // password, verified, email & phone
-    const user = new user({
+    const user = new User({
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,

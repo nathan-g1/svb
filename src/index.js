@@ -1,15 +1,24 @@
 const express = require('express');
 const app = express();
-app.use(express.json());
+// app.use(express.json());
 const cors = require("cors");
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 require('dotenv/config');
+var bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
 //use local db instead?
 //try this 
 // mongoose.connect(, { useNewUrlParser: true, useUnifiedTopology: true }, () => console.log('connected to DB'));
 
-mongoose.connect(process.env.DB_CONN_LOCAL, { useNewUrlParser: true, useUnifiedTopology: true }, () => { console.log('connected to DB') });
+// mongoose.connect(process.env.DB_CONN_LOCAL, { useNewUrlParser: true, useUnifiedTopology: true }, () => { console.log('connected to DB') });
+mongoose
+  .connect("mongodb://localhost/samVision", { useNewUrlParser: true })
+  .then(() => console.log("Connected to MongoDB..."))
+  .catch(err => console.error("Could not connect to MongoDB..."));
+
+
 const userRoute = require('./routes/user');
 const orderRoute = require('./routes/order');
 const productRoute = require('./routes/product');
