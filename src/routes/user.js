@@ -35,10 +35,6 @@ router.post('/signup', async (req, res) => {
 });
 
 
-
-
-
-
 router.post('/login', async (req, res) => {
     // send a token id to the Browser
     // consider including JWT for auth 
@@ -47,8 +43,12 @@ router.post('/login', async (req, res) => {
         email: req.body.email,
     });
     try {
-        const oldUser = await user.save(user);
-        res.json(oldUser);
+        if (User.find({ "email": user.email })) {
+            const oldUser = await User.find({ "email": user.email });
+            res.json(oldUser);
+        } else {
+            res.json({ messge: `user ${user.email} not found` });
+        }
     } catch (err) {
         res.json({ message: err });
     }

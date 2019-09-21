@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const UserSchema = mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: false
     },
     password: {
         type: String,
@@ -16,7 +16,7 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: false
     },
-    type: { 
+    type: {
         type: String,
         required: true,
         default: "ptn"
