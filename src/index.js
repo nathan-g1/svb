@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+app.use(express.json());
 const cors = require("cors");
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
@@ -8,7 +9,7 @@ require('dotenv/config');
 //try this 
 // mongoose.connect(, { useNewUrlParser: true, useUnifiedTopology: true }, () => console.log('connected to DB'));
 
-mongoose.connect(process.env.BB_CONN_TWO, { useNewUrlParser: true, useUnifiedTopology: true }, () => console.log('connected to DB'));
+mongoose.connect(process.env.DB_CONN_LOCAL, { useNewUrlParser: true, useUnifiedTopology: true }, () => { console.log('connected to DB') });
 const userRoute = require('./routes/user');
 const orderRoute = require('./routes/order');
 const productRoute = require('./routes/product');
@@ -36,6 +37,7 @@ app.get('/', function (req, res) {
 
 //test routes
 app.post('/h', function (req, res) {
+    console.log(req.body);
     res.send({ name: 'asdfasd', age: 234, phone: 234234, url: 'facebook.com' });
 });
 
