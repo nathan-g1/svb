@@ -16,7 +16,7 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: false
     },
-    type: {
+    type: { 
         type: String,
         required: true,
         default: "ptn"
@@ -28,7 +28,7 @@ const UserSchema = mongoose.Schema({
     },
     image: {
         type: String,
-        required: true
+        required: false
     },
     regDate: {
         type: Date,
