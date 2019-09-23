@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-// app.use(express.json());
+app.use('/images', express.static(__dirname + '/images'));
 const cors = require("cors");
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
