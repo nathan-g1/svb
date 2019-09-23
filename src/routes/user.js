@@ -6,8 +6,9 @@ router.get('/', async (req, res) => {
     console.log('request to all the users');
     try {
         const users = await User.find();
+        return res.json(users);
     } catch (error) {
-        res.json({ message: error });
+        return res.json({ message: error });
     }
 });
 
@@ -28,9 +29,9 @@ router.post('/signup', async (req, res) => {
     });
     try {
         const newUser = await user.save(user);
-        res.json(newUser);
+        return res.json(newUser);
     } catch (err) {
-        res.json({ message: err });
+        return res.json({ message: err });
     }
 });
 
@@ -38,24 +39,25 @@ router.post('/login', async (req, res) => {
     // send a token id to the Browser
     // consider including JWT for auth 
     const user = new User({
-        name: req.body.email,
-        email: req.body.password,
+        email: req.body.email,
+        password: req.body.password,
     });
     try {
-        if (User.find({ "email": user.email, "password": user.password })) {
-            const oldUser = await User.find({ "email": user.email });
-            res.json(oldUser);
+        var _user = await User.findOne({ "email": user.email });
+        if (_user !== null) {
+            if (_user.password === user.password) {
+                console.log("there is a user")
+                const oldUser = await User.findOne({ "email": user.email });
+                return res.json(oldUser);
+            } else {
+                return res.json({ messge: `incorrect password` });
+            }
         } else {
-            res.json({ messge: `user ${user.email} not found` });
+            return res.json({ messge: `user ${user.email} not found` });
         }
     } catch (err) {
-        res.json({ message: err });
+        return res.json({ message: err });
     }
 });
-
-
-
-
-
 
 module.exports = router;
