@@ -15,7 +15,6 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/signup', async (req, res) => {
-
     try {
         const user = new User(req.body)
         await user.save()

@@ -3,14 +3,15 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const UserSchema = mongoose.Schema({
-    name: {
+    firstname: {
         type: String,
         required: true
     },
-    password: {
+    lastname: {
         type: String,
-        required: true,
+        required: true
     },
+    
     email: {
         type: String,
         required: true,
@@ -22,28 +23,34 @@ const UserSchema = mongoose.Schema({
             }
         }
     },
-    // location: {
-    //     type: String,
-    //     required: false
-    // },
-    // type: {
-    //     type: String,
-    //     required: true,
-    //     default: "ptn"
-    //     // user types ptn, adm, phy
-    // },
-    // phone: {
-    //     type: String,
-    //     required: false
-    // },
-    // image: {
-    //     type: String,
-    //     required: false
-    // },
-    // regDate: {
-    //     type: Date,
-    //     default: Date.now()
-    // },
+    phone: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+    
+    location: {
+        type: String,
+        required: false
+    },
+    type: {
+        type: String,
+        required: true,
+        default: "ptn"
+        // user types ptn, adm, phy
+    },
+   
+    image: {
+        type: String,
+        required: false
+    },
+    regDate: {
+        type: Date,
+        default: Date.now()
+    },
     tokens: [{
         token: {
             type: String,
