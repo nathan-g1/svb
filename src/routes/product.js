@@ -73,6 +73,26 @@ router.put('/update/:id', async (req, res) => {
     }
 });
 
+router.delete('/delete/:id', async (req, res) => {
+    const user = new User({
+        id: req.body.user.id,
+        name: req.body.user.name,
+        email: req.body.user.email,
+        type: req.body.user.type
+    });
+    try {
+        if (user.type === "adm") {
+            const showPdt = await Product.findById({ _id: req.params.id });
+            await Product.findByIdAndDelete({ _id: req.params.id });
+            return res.json(showPdt);
+        } else {
+            return res.json({ message: "Opperation Not allowed for this user!" });
+        }
+    } catch (err) {
+        return res.json({ message: err });
+    }
+});
+
 
 
 
