@@ -20,7 +20,9 @@ app.use(express.json());
 
 mongoose.connect(process.env.DB_CONN_LOCAL, {
     useNewUrlParser: true,
+    useUnifiedTopology: true,
     useCreateIndex: true,
+    useFindAndModify: false
 })
 
 
@@ -45,7 +47,6 @@ app.use('/appointments', appointmentRoute);
 app.get('/', function (req, res) {
     //return the date the server starts
     res.send('Hello There');
-
 });
 
 
