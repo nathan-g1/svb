@@ -8,26 +8,27 @@ const ProductSchema = mongoose.Schema({
         type: Number,
         required: true
     }
-    // ,description: {
-    //     type: String,
-    //     required: true
-    // },
-    // type: {
-    //     type: String,
-    //     required: true
-    // },
-    // model: {
-    //     type: String,
-    //     required: true
-    // },
-    // available: {
-    //     type: Boolean,
-    //     required: true
-    // },
-    // image: {
-    //     type: String,
-    //     required: true
-    // }
+    , description: {
+        type: String,
+        required: false
+    },
+    type: {
+        type: String,//either lns or frm
+        required: true
+    },
+    model: {
+        type: String,
+        required: true
+    },
+    available: {
+        type: Boolean,
+        required: true,
+        default: true
+    },
+    image: {
+        type: String,
+        required: true
+    }
 });
 
 module.exports = mongoose.model('Products', ProductSchema);
