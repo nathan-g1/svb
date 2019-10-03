@@ -1,14 +1,31 @@
 const express = require('express');
 const app = express();
+app.use('/images', express.static(__dirname + '/images'));
 const cors = require("cors");
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 require('dotenv/config');
+app.use(express.json());
+
 //use local db instead?
 //try this 
 // mongoose.connect(, { useNewUrlParser: true, useUnifiedTopology: true }, () => console.log('connected to DB'));
 
-mongoose.connect(process.env.BB_CONN_TWO, { useNewUrlParser: true, useUnifiedTopology: true }, () => console.log('connected to DB'));
+// mongoose.connect(process.env.DB_CONN_LOCAL, { useNewUrlParser: true, useUnifiedTopology: true }, () => { console.log('connected to DB') });
+// mongoose
+//   .connect("mongodb://localhost/samVision", { useNewUrlParser: true })
+//   .then(() => console.log("Connected to MongoDB..."))
+//   .catch(err => console.error("Could not connect to MongoDB..."));
+
+
+mongoose.connect(process.env.DB_CONN_LOCAL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+})
+
+
 const userRoute = require('./routes/user');
 const orderRoute = require('./routes/order');
 const productRoute = require('./routes/product');
@@ -30,12 +47,12 @@ app.use('/appointments', appointmentRoute);
 app.get('/', function (req, res) {
     //return the date the server starts
     res.send('Hello There');
-
 });
 
 
 //test routes
 app.post('/h', function (req, res) {
+    console.log(req.body);
     res.send({ name: 'asdfasd', age: 234, phone: 234234, url: 'facebook.com' });
 });
 
