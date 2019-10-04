@@ -54,14 +54,8 @@ router.post('/add', async (req, res) => {
 });
 
 router.put('/update/:id', async (req, res) => {
-    const user = new User({
-        id: req.body.user.id,
-        name: req.body.user.name,
-        email: req.body.user.email,
-        type: req.body.user.type
-    });
     try {
-        if (user.type === "adm") {
+        if (req.body.user.type === "adm") {
             await Product.findByIdAndUpdate({ _id: req.params.id }, req.body.product);
             const _afterProduct = await Product.findOne({ _id: req.params.id });
             return res.json(_afterProduct);
