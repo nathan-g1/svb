@@ -4,15 +4,8 @@ const Order = require('../model/Order');
 
 // get all orders 
 router.get('/', async (req, res) => {
-    // requires the front-end to send the type of the user
-    console.log('request to all the orders');
     try {
-        if (Object.keys(req.body).length === 0) {
-            return res.json({ message: 'opperation not allowed for unauthorized user' });
-        }
-        if (req.body.user.type !== 'adm') {
-            return res.json({ message: 'opperation not allowed for this user' });
-        }
+
         const orders = await Order.find();
         return res.json(orders);
     } catch (err) {
@@ -22,9 +15,7 @@ router.get('/', async (req, res) => {
 // get a single order using order id
 router.get('/:id', async (req, res) => {
     // requires the front-end to send the type of the user
-    if (req.body.user.type !== 'adm') {
-        return res.json({ message: 'opperation not allowd for this user' });
-    }
+   
     try {
         const singleProduct = await Order.findOne({ _id: req.params.id });
         return res.json(singleProduct);
@@ -35,7 +26,6 @@ router.get('/:id', async (req, res) => {
 
 // all orders made by a single user
 router.get('/cart/:id', async (req, res) => {
-    console.log(`request all orders by user ${req.params.id}`);
     try {
         const singleProduct = await Order.find({ userId: req.params.id });
         return res.json(singleProduct);
@@ -45,7 +35,6 @@ router.get('/cart/:id', async (req, res) => {
 });
 
 router.post('/add/', async (req, res) => {
-    console.log(`ordering product ${req.body.productId}`);
     const order = new Order({
         quantity: req.body.quantity,
         productId: req.body.productId,
@@ -61,7 +50,6 @@ router.post('/add/', async (req, res) => {
 });
 // update a single order using order id
 router.put('/update/:id', async (req, res) => {
-    console.log(`updating order ${req.params.id}`);
     try {
         await Order.findByIdAndUpdate({ _id: req.params.id }, req.body);
         const _afterUpdate = await Order.findOne({ _id: req.params.id });

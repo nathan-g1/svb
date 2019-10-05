@@ -5,7 +5,6 @@ const upload = require('../middleware/uploadFile');
 
 router.get('/', async (req, res) => {
     // res.send('these are all the products');
-    console.log('request to all the products');
     try {
         const products = await Product.find().limit(40);
         res.json(products);
@@ -16,7 +15,6 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
     // check/handle the id coming from the user and pass to the product
-    console.log('request to the product: ' + req.params.id);
     try {
         const products = await Product.findById(req.params.id);
         return res.json(products);
@@ -28,7 +26,6 @@ router.get('/:id', async (req, res) => {
 // add new product with image
 // http expects multi-form data instead of raw body data from the request
 router.post('/add', upload.array('productImages', 5), async (req, res) => {
-    console.log(req.files);
     const imagePath = [];
     for (let i = 0; i < req.files.length; i++) {
         imagePath.push(req.files[i].path);
@@ -51,13 +48,11 @@ router.post('/add', upload.array('productImages', 5), async (req, res) => {
 
 router.put('/update/:id', async (req, res) => {
     try {
-        if (req.body.user.type === "adm") {
+        
             await Product.findByIdAndUpdate({ _id: req.params.id }, req.body.product);
             const _afterProduct = await Product.findOne({ _id: req.params.id });
             return res.json({ message: "successfully updated", product: _afterProduct });
-        } else {
-            return res.json({ message: "Not allowed to update for this user!" });
-        }
+        
     } catch (err) {
         return res.json({ message: err });
     }
@@ -65,13 +60,11 @@ router.put('/update/:id', async (req, res) => {
 
 router.delete('/delete/:id', async (req, res) => {
     try {
-        if (req.body.user.type === "adm") {
+        
             const showPdt = await Product.findById({ _id: req.params.id });
             await Product.findByIdAndDelete({ _id: req.params.id });
             return res.json({ message: "successfully deleted", product: showPdt });
-        } else {
-            return res.json({ message: "Opperation Not allowed for this user!" });
-        }
+       
     } catch (err) {
         return res.json({ message: err });
     }

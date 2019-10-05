@@ -26,9 +26,7 @@ router.put('/profile/edit/:id', upload.single('image'), async (req, res) => {
     } catch (err) {
         res.json({ message: err });
     }
-    if (Object.keys(req.body).length === 0) {
-        return res.json({ message: 'opperation not allowed for unauthorized user' });
-    }
+
 });
 
 // get all users
@@ -91,7 +89,6 @@ router.post('/logout', auth, async (req, res) => {
 
 // add new physicians 
 router.post('/add/physician', upload.single('image'), async (req, res) => {
-    console.log(req.file);
     try {
         const user = new User({
             firstname: req.body.firstname,
@@ -103,8 +100,8 @@ router.post('/add/physician', upload.single('image'), async (req, res) => {
             image: req.file.path,
         });
         await user.save();
-        // const token = await user.generateAuthToken(); // fix token here
-        res.status(200).json({ message: "successfully added", user: user });
+        const token = await user.generateAuthToken();
+        res.status(200).json({ message: "successfully added", user: user, token: token });
     } catch (error) {
         res.status(400).send(error)
     }
@@ -113,12 +110,10 @@ router.post('/add/physician', upload.single('image'), async (req, res) => {
 // get all physicians fro admin
 router.get('/physicians', async (req, res) => {
     try {
-        if (req.body.user.type === "adm") {
-            const physicians = await User.find({ type: "phy" });
-            return res.status(200).json(physicians);
-        } else {
-            return res.json({ message: "Opperation Not allowed for this user!" });
-        }
+
+        const physicians = await User.find({ type: "phy" });
+        return res.status(200).json(physicians);
+
     } catch (error) {
         res.status(400).send(error);
     }
@@ -127,13 +122,11 @@ router.get('/physicians', async (req, res) => {
 // delete a physician using user id
 router.delete('/physicians/:id', async (req, res) => {
     try {
-        if (req.body.user.type === "adm") {
-            const deletedPhysician = await User.findOne({ _id: req.params.id });
-            await User.findByIdAndDelete({ _id: req.params.id });
-            return res.status(200).json(deletedPhysician);
-        } else {
-            return res.json({ message: "Opperation Not allowed for this user!" });
-        }
+
+        const deletedPhysician = await User.findOne({ _id: req.params.id });
+        await User.findByIdAndDelete({ _id: req.params.id });
+        return res.status(200).json(deletedPhysician);
+
     } catch (error) {
         res.status(400).send(error)
     }
