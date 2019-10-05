@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express();
-app.use('/images', express.static(__dirname + '/images'));
+const device = require('express-device');
+const path = require('path');
+app.use(device.capture());
+app.use('/images', express.static(path.join(__dirname, '../images')));
 const cors = require("cors");
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
@@ -23,8 +26,7 @@ mongoose.connect(process.env.DB_CONN_LOCAL, {
     useUnifiedTopology: true,
     useCreateIndex: true,
     useFindAndModify: false
-})
-
+});
 
 const userRoute = require('./routes/user');
 const orderRoute = require('./routes/order');
