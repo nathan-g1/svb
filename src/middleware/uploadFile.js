@@ -5,7 +5,7 @@ const fileFilter = (req, file, cb) => {
   // reject files that are not jpeg, png, bmp, GIF
   var ext = path.extname(file.originalname);
   if (ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg' && ext !== '.bmp') {
-    return callback(new Error('Only images are allowed'));
+    return cb(new Error('Only images are allowed'));
   }
   cb(null, true);
 }
