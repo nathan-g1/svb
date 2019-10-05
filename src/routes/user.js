@@ -2,28 +2,50 @@ const express = require('express');
 const router = express.Router();
 const User = require('../model/User');
 const auth = require('../middleware/auth')
-
+const upload = require('../middleware/uploadFile');
 
 router.get('/profile', auth, async (req, res) => {
     // View logged in user profile
     res.send(req.user)
-})
-
-
-router.get('/', async (req, res) => {
-    const allUsers = await User.find();
+});
+// Edit profile/user account
+// to upload image for the user
+router.put('/profile/edit/:id', upload.single('image'), async (req, res) => {
     try {
+        const updatedUserInfo = {
+            image: req.file.path,
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            password: req.body.password,
+            location: req.body.location,
+            phone: req.body.phone,
+        }
+        await User.findByIdAndUpdate({ _id: req.params.id }, updatedUserInfo);
+        const updatedUser = await User.findOne({ _id: req.params.id });
+        res.json({ message: "successfully updated", product: updatedUser });
+    } catch (err) {
+        res.json({ message: err });
+    }
+    if (Object.keys(req.body).length === 0) {
+        return res.json({ message: 'opperation not allowed for unauthorized user' });
+    }
+});
+
+// get all users
+router.get('/', async (req, res) => {
+    try {
+        const allUsers = await User.find();
         return res.json(allUsers);
     } catch (err) {
         return res.json({ message: err });
     }
 });
 
-
+// get a single user
 router.get('/:id', async (req, res) => {
-    const allUsers = await User.findOne({ _id: req.params.id });
     try {
-        return res.json(allUsers);
+        const userUnique = await User.findOne({ _id: req.params.id });
+        return res.json(userUnique);
     } catch (err) {
         return res.json({ message: err });
     }
@@ -41,10 +63,8 @@ router.post('/signup', async (req, res) => {
 });
 
 router.post('/login', async (req, res) => {
-
     try {
         const { email, password } = req.body;
-
         const user = await User.findByCredentials(email, password);
         if (!user) {
             return res.status(401).send({ error: 'Login failed! Check authentication credentials' });
@@ -69,45 +89,45 @@ router.post('/logout', auth, async (req, res) => {
     }
 });
 
-router.post('/add/physician', async (req, res) => {
+// add new physicians 
+router.post('/add/physician', upload.single('image'), async (req, res) => {
+    console.log(req.file);
     try {
-        const user = new User(req.body);
+        const user = new User({
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            password: req.body.password,
+            type: "phy",
+            email: req.body.email,
+            phone: req.body.phone,
+            image: req.file.path,
+        });
         await user.save();
-        const token = await user.generateAuthToken();
-        res.status(200).send({ user, token });
+        // const token = await user.generateAuthToken(); // fix token here
+        res.status(200).json({ message: "successfully added", user: user });
     } catch (error) {
         res.status(400).send(error)
     }
 });
 
+// get all physicians fro admin
 router.get('/physicians', async (req, res) => {
-    const userAdmin = new User({
-        id: req.body.user.id,
-        name: req.body.user.name,
-        email: req.body.user.email,
-        type: req.body.user.type
-    });
     try {
-        if (user.type === "adm") {
+        if (req.body.user.type === "adm") {
             const physicians = await User.find({ type: "phy" });
             return res.status(200).json(physicians);
         } else {
             return res.json({ message: "Opperation Not allowed for this user!" });
         }
     } catch (error) {
-        res.status(400).send(error)
+        res.status(400).send(error);
     }
 });
 
+// delete a physician using user id
 router.delete('/physicians/:id', async (req, res) => {
-    const userAdmin = new User({
-        id: req.body.user.id,
-        name: req.body.user.name,
-        email: req.body.user.email,
-        type: req.body.user.type
-    });
     try {
-        if (user.type === "adm") {
+        if (req.body.user.type === "adm") {
             const deletedPhysician = await User.findOne({ _id: req.params.id });
             await User.findByIdAndDelete({ _id: req.params.id });
             return res.status(200).json(deletedPhysician);

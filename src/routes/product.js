@@ -43,7 +43,7 @@ router.post('/add', upload.array('productImages', 5), async (req, res) => {
     });
     try {
         const newProduct = await product.save();
-        return res.json({ message: "successfully added a new Product", newProduct });
+        return res.json({ message: "successfully added a new Product", product: newProduct });
     } catch (err) {
         return res.json({ message: err });
     }
