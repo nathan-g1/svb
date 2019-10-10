@@ -53,8 +53,8 @@ router.post('/signup', async (req, res) => {
     try {
         const user = new User(req.body)
         await user.save()
-        // const token = await user.generateAuthToken()
-        res.status(200).json({ message: "login successful", user });
+        const token = await user.generateAuthToken()
+        return res.status(200).json({ user, token });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -71,7 +71,8 @@ router.post('/login', async (req, res) => {
         if (user.password !== req.body.password) {
             return res.status(200).json({ error: 'Invalid login credentials' })
         }
-        res.json({ message: "login successful", user });
+        const token = await user.generateAuthToken();
+        return res.json({ user, token });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
