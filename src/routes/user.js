@@ -54,7 +54,7 @@ router.post('/signup', async (req, res) => {
         const user = new User(req.body)
         await user.save()
         // const token = await user.generateAuthToken()
-        res.status(200).json({ message: "login successful", user });
+        res.status(200).json({ user });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -65,13 +65,16 @@ router.post('/login', async (req, res) => {
         // Search for a user by email and password.
         const user = await User.findOne({ "email": req.body.email });
         if (!user) {
+            console.log('invalid')
+
             return res.json({ error: 'Invalid login credentials' })
         }
 
-        if (user.password !== req.body.password) {
-            return res.status(200).json({ error: 'Invalid login credentials' })
-        }
-        res.json({ message: "login successful", user });
+        // if (user.password !== req.body.password) {
+        //     return res.status(200).json({ error: 'Invalid login credentials' })
+            
+        // }
+        res.json({ user });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -80,15 +83,11 @@ router.post('/login', async (req, res) => {
 
 router.post('/logout', auth, async (req, res) => {
     // Log user out of the application
-    try {
-        req.user.tokens = req.user.tokens.filter((token) => {
-            return token.token != req.token
-        })
+    console.log(req.user)
+ 
         await req.user.save()
         res.send()
-    } catch (error) {
-        res.status(500).send(error)
-    }
+    
 });
 
 // add new physicians 
@@ -105,7 +104,7 @@ router.post('/add/physician', upload.single('image'), async (req, res) => {
         });
         await user.save();
         const token = await user.generateAuthToken();
-        res.status(200).json({ message: "successfully added", user: user, token: token });
+        res.status(200).json({ user: user, token: token });
     } catch (error) {
         res.status(400).send(error)
     }
