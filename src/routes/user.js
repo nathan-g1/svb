@@ -69,9 +69,9 @@ router.post('/login', async (req, res) => {
             return res.json({ error: 'Invalid login credentials' })
         }
 
-        // if (user.password !== req.body.password) {
-        //     return res.status(200).json({ error: 'Invalid login credentials' })
-        // }
+        if (user.password !== req.body.password) {
+            return res.status(200).json({ error: 'Invalid login credentials' })
+        }
         const token = await user.generateAuthToken();
         return res.json({ user });
     } catch (error) {
