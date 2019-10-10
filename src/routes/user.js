@@ -52,7 +52,8 @@ router.get('/:id', async (req, res) => {
 router.post('/signup', async (req, res) => {
     try {
         const user = new User(req.body)
-        await user.save()
+        await user.save();
+        const token = await user.generateAuthToken();
         return res.status(200).json({ user });
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -64,7 +65,6 @@ router.post('/login', async (req, res) => {
         // Search for a user by email and password.
         const user = await User.findOne({ "email": req.body.email });
         if (!user) {
-            console.log('invalid')
 
             return res.json({ error: 'Invalid login credentials' })
         }
@@ -73,7 +73,7 @@ router.post('/login', async (req, res) => {
         //     return res.status(200).json({ error: 'Invalid login credentials' })
         // }
         const token = await user.generateAuthToken();
-        return res.json({ user, token });
+        return res.json({ user });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
