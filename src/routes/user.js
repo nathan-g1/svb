@@ -53,8 +53,7 @@ router.post('/signup', async (req, res) => {
     try {
         const user = new User(req.body)
         await user.save()
-        const token = await user.generateAuthToken()
-        return res.status(200).json({ user, token });
+        return res.status(200).json({ user });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
