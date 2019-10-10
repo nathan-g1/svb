@@ -53,26 +53,30 @@ router.post('/signup', async (req, res) => {
     try {
         const user = new User(req.body)
         await user.save()
-        const token = await user.generateAuthToken()
-        res.status(201).send({ user, token })
+        // const token = await user.generateAuthToken()
+        res.status(200).json({ message: "login successful", user });
     } catch (error) {
-        res.status(400).send(error)
+        res.status(400).json({ message: error.message });
     }
 });
 
 router.post('/login', async (req, res) => {
     try {
-        const { email, password } = req.body;
-        const user = await User.findByCredentials(email, password);
+        // Search for a user by email and password.
+        const user = await User.findOne({ "email": req.body.email });
         if (!user) {
-            return res.status(401).send({ error: 'Login failed! Check authentication credentials' });
+            return res.json({ error: 'Invalid login credentials' })
         }
-        const token = await user.generateAuthToken();
-        res.send({ user, token });
+
+        if (user.password !== req.body.password) {
+            return res.status(200).json({ error: 'Invalid login credentials' })
+        }
+        res.json({ message: "login successful", user });
     } catch (error) {
-        res.status(400).send(error);
+        res.status(400).json({ message: error.message });
     }
 });
+
 
 router.post('/logout', auth, async (req, res) => {
     // Log user out of the application

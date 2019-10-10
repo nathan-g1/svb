@@ -11,7 +11,7 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    
+
     email: {
         type: String,
         required: true,
@@ -19,7 +19,7 @@ const UserSchema = mongoose.Schema({
         lowercase: true,
         validate: value => {
             if (!validator.isEmail(value)) {
-                throw new Error({error: 'Invalid Email address'})
+                throw new Error({ error: 'Invalid Email address' })
             }
         }
     },
@@ -31,7 +31,7 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    
+
     location: {
         type: String,
         required: false
@@ -42,7 +42,6 @@ const UserSchema = mongoose.Schema({
         default: "ptn"
         // user types ptn, adm, phy
     },
-   
     image: {
         type: String,
         required: false
@@ -51,12 +50,11 @@ const UserSchema = mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    tokens: [{
-        token: {
-            type: String,
-            required: true
-        }
-    }]
+    token: {
+        type: String,
+        required: false
+    }
+
 });
 
 UserSchema.pre('save', async function (next) {
@@ -68,18 +66,18 @@ UserSchema.pre('save', async function (next) {
     next()
 })
 
-UserSchema.methods.generateAuthToken = async function() {
+UserSchema.methods.generateAuthToken = async function () {
     // Generate an auth token for the user
     const user = this
-    const token = jwt.sign({_id: user._id}, process.env.JWT_KEY)
-    user.tokens = user.tokens.concat({token})
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY)
+    user.tokens = user.tokens.concat({ token })
     await user.save()
     return token
 }
 
 UserSchema.statics.findByCredentials = async (email, password) => {
     // Search for a user by email and password.
-    const user = await User.findOne({ email} )
+    const user = await User.findOne({ email })
     if (!user) {
         throw new Error({ error: 'Invalid login credentials' })
     }
