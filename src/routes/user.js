@@ -80,11 +80,11 @@ router.post('/login', async (req, res) => {
 });
 
 
-router.post('/logout', auth, async (req, res) => {
+router.post('/logout', async (req, res) => {
     // Log user out of the application
     console.log(req.user)
  
-        await req.user.save()
+        
         res.send()
     
 });
