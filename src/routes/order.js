@@ -5,7 +5,6 @@ const Order = require('../model/Order');
 // get all orders 
 router.get('/', async (req, res) => {
     try {
-
         const orders = await Order.find();
         return res.json(orders);
     } catch (err) {
@@ -15,7 +14,7 @@ router.get('/', async (req, res) => {
 // get a single order using order id
 router.get('/:id', async (req, res) => {
     // requires the front-end to send the type of the user
-   
+
     try {
         const singleProduct = await Order.findOne({ _id: req.params.id });
         return res.json(singleProduct);
@@ -38,6 +37,7 @@ router.post('/add/', async (req, res) => {
     const order = new Order({
         quantity: req.body.quantity,
         productId: req.body.productId,
+        productData: req.body.productData,
         userId: req.body.userId,
         description: req.body.description
     });
