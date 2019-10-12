@@ -20,7 +20,7 @@ router.put('/profile/edit/:id', upload.single('image'), async (req, res) => {
                 lastname: req.body.lastname,
                 password: req.body.password,
                 location: req.body.location,
-                phone: req.body.phone,
+                phone: req.body.phone
             }
             await User.findByIdAndUpdate({ _id: req.params.id }, updatedUserInfo);
             const updatedUser = await User.findOne({ _id: req.params.id });
@@ -32,8 +32,7 @@ router.put('/profile/edit/:id', upload.single('image'), async (req, res) => {
                 lastname: req.body.lastname,
                 password: req.body.password,
                 location: req.body.location,
-                phone: req.body.phone,
-
+                phone: req.body.phone
             }
             await User.findByIdAndUpdate({ _id: req.params.id }, updatedUserInfo);
             const updatedUser = await User.findOne({ _id: req.params.id });
