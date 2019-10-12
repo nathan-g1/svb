@@ -48,8 +48,8 @@ router.post('/add', upload.array('productImages', 5), async (req, res) => {
 
 router.put('/update/:id', async (req, res) => {
     try {
-        
-            await Product.findByIdAndUpdate({ _id: req.params.id }, req.body.product);
+    
+            await Product.findByIdAndUpdate({ _id: req.params.id }, req.body);
             const _afterProduct = await Product.findOne({ _id: req.params.id });
             return res.json({ message: "successfully updated", product: _afterProduct });
         
