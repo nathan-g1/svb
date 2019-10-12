@@ -1,47 +1,30 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../model/User');
-const auth = require('../middleware/auth')
+const auth = require('../middleware/auth');
 const upload = require('../middleware/uploadFile');
 
 router.get('/profile', auth, async (req, res) => {
     // View logged in user profile
-    res.send(req.user)
+    res.send(req.user);
 });
 // Edit profile/user account
 // to upload image for the user
 router.put('/profile/edit/:id', upload.single('image'), async (req, res) => {
     try {
         if (req.file !== undefined) {
-            console.log(234);
-            const updatedUserInfo = {
-                image: req.file.path,
-                firstname: req.body.firstname,
-                lastname: req.body.lastname,
-                password: req.body.password,
-                location: req.body.location,
-                phone: req.body.phone
-            }
-            await User.findByIdAndUpdate({ _id: req.params.id }, updatedUserInfo);
+            req.body.image = req.file.path;
+            await User.findByIdAndUpdate({ _id: req.params.id }, req.body);
             const updatedUser = await User.findOne({ _id: req.params.id });
-            res.json({ message: "successfully updated", product: updatedUser });
+            return res.json({ message: "successfully updated", product: updatedUser });
         } else {
-            console.log(20000);
-            const updatedUserInfo = {
-                firstname: req.body.firstname,
-                lastname: req.body.lastname,
-                password: req.body.password,
-                location: req.body.location,
-                phone: req.body.phone
-            }
-            await User.findByIdAndUpdate({ _id: req.params.id }, updatedUserInfo);
+            await User.findByIdAndUpdate({ _id: req.params.id }, req.body);
             const updatedUser = await User.findOne({ _id: req.params.id });
-            res.json({ message: "successfully updated", product: updatedUser });
+            return res.json({ message: "successfully updated", product: updatedUser });
         }
     } catch (err) {
         res.json({ message: err });
     }
-
 });
 
 // get all users
@@ -81,7 +64,7 @@ router.post('/login', async (req, res) => {
         const user = await User.findOne({ "email": req.body.email });
         if (!user) {
 
-            return res.json({ error: 'In    valid login credentials' })
+            return res.json({ error: 'Invalid login credentials' })
         }
 
         if (user.password !== req.body.password) {
