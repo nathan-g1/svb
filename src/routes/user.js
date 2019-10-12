@@ -12,17 +12,33 @@ router.get('/profile', auth, async (req, res) => {
 // to upload image for the user
 router.put('/profile/edit/:id', upload.single('image'), async (req, res) => {
     try {
-        const updatedUserInfo = {
-            image: req.file.path,
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            password: req.body.password,
-            location: req.body.location,
-            phone: req.body.phone,
+        if (req.file !== undefined) {
+            console.log(234);
+            const updatedUserInfo = {
+                image: req.file.path,
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                password: req.body.password,
+                location: req.body.location,
+                phone: req.body.phone,
+            }
+            await User.findByIdAndUpdate({ _id: req.params.id }, updatedUserInfo);
+            const updatedUser = await User.findOne({ _id: req.params.id });
+            res.json({ message: "successfully updated", product: updatedUser });
+        } else {
+            console.log(20000);
+            const updatedUserInfo = {
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                password: req.body.password,
+                location: req.body.location,
+                phone: req.body.phone,
+
+            }
+            await User.findByIdAndUpdate({ _id: req.params.id }, updatedUserInfo);
+            const updatedUser = await User.findOne({ _id: req.params.id });
+            res.json({ message: "successfully updated", product: updatedUser });
         }
-        await User.findByIdAndUpdate({ _id: req.params.id }, updatedUserInfo);
-        const updatedUser = await User.findOne({ _id: req.params.id });
-        res.json({ message: "successfully updated", product: updatedUser });
     } catch (err) {
         res.json({ message: err });
     }
@@ -66,7 +82,7 @@ router.post('/login', async (req, res) => {
         const user = await User.findOne({ "email": req.body.email });
         if (!user) {
 
-            return res.json({ error: 'Invalid login credentials' })
+            return res.json({ error: 'In    valid login credentials' })
         }
 
         if (user.password !== req.body.password) {
@@ -83,10 +99,10 @@ router.post('/login', async (req, res) => {
 router.post('/logout', async (req, res) => {
     // Log user out of the application
     console.log(req.user)
- 
-        
-        res.send()
-    
+
+
+    res.send()
+
 });
 
 // add new physicians 
