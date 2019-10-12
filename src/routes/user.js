@@ -16,11 +16,11 @@ router.put('/profile/edit/:id', upload.single('image'), async (req, res) => {
             req.body.image = req.file.path;
             await User.findByIdAndUpdate({ _id: req.params.id }, req.body);
             const updatedUser = await User.findOne({ _id: req.params.id });
-            return res.json({ message: "successfully updated", product: updatedUser });
+            return res.json({ message: "successfully updated", user: updatedUser });
         } else {
             await User.findByIdAndUpdate({ _id: req.params.id }, req.body);
             const updatedUser = await User.findOne({ _id: req.params.id });
-            return res.json({ message: "successfully updated", product: updatedUser });
+            return res.json({ message: "successfully updated", user: updatedUser });
         }
     } catch (err) {
         res.json({ message: err });
