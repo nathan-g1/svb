@@ -1,8 +1,6 @@
 const express = require('express');
 const app = express();
-const device = require('express-device');
 const path = require('path');
-app.use(device.capture());
 app.use('/images', express.static(path.join(__dirname, '../images')));
 const cors = require("cors");
 const PORT = process.env.PORT || 3000;
@@ -32,6 +30,8 @@ const userRoute = require('./routes/user');
 const orderRoute = require('./routes/order');
 const productRoute = require('./routes/product');
 const appointmentRoute = require('./routes/appointment');
+const subscriptionRoute = require('./routes/subscribe');
+
 /*
     middleware for express that is used to enable [CORS]
     (http://en.wikipedia.org/wiki/Cross-origin_resource_sharing) with various options.
@@ -44,7 +44,7 @@ app.use('/users', userRoute);
 app.use('/orders', orderRoute);
 app.use('/products', productRoute);
 app.use('/appointments', appointmentRoute);
-
+app.use('/subscriptions', subscriptionRoute);
 
 app.get('/', function (req, res) {
     //return the date the server starts
