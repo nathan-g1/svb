@@ -30,17 +30,12 @@ router.post('/add', upload.array('productImages', 5), async (req, res) => {
     for (let i = 0; i < req.files.length; i++) {
         imagePath.push(req.files[i].path);
     }
-    const product = new Product({
-        name: req.body.name,
-        price: req.body.price,
-        description: req.body.description,
-        model: req.body.model,
-        type: req.body.type,
-        image: imagePath
-    });
+    req.body.image = imagePath;
+    const product = new Product(req.body);
+    console.log(product);
     try {
         const newProduct = await product.save();
-        return res.json({ message: "successfully added a new Product", product: newProduct });
+        return res.json({ message: "successfully added", product: newProduct });
     } catch (err) {
         return res.json({ message: err });
     }
@@ -48,11 +43,9 @@ router.post('/add', upload.array('productImages', 5), async (req, res) => {
 
 router.put('/update/:id', async (req, res) => {
     try {
-    
-            await Product.findByIdAndUpdate({ _id: req.params.id }, req.body);
-            const _afterProduct = await Product.findOne({ _id: req.params.id });
-            return res.json(_afterProduct);
-        
+        await Product.findByIdAndUpdate({ _id: req.params.id }, req.body);
+        const _afterProduct = await Product.findOne({ _id: req.params.id });
+        return res.json(_afterProduct );
     } catch (err) {
         return res.json({ message: err });
     }
@@ -60,11 +53,10 @@ router.put('/update/:id', async (req, res) => {
 
 router.delete('/delete/:id', async (req, res) => {
     try {
-        
-            const showPdt = await Product.findById({ _id: req.params.id });
-            await Product.findByIdAndDelete({ _id: req.params.id });
-            return res.json({ message: "successfully deleted", product: showPdt });
-       
+        const showPdt = await Product.findById({ _id: req.params.id });
+        await Product.findByIdAndDelete({ _id: req.params.id });
+        return res.json({ message: "successfully deleted", product: showPdt });
+
     } catch (err) {
         return res.json({ message: err });
     }
