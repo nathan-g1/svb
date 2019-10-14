@@ -16,11 +16,11 @@ router.put('/profile/edit/:id', upload.single('image'), async (req, res) => {
             req.body.image = req.file.path;
             await User.findByIdAndUpdate({ _id: req.params.id }, req.body);
             const updatedUser = await User.findOne({ _id: req.params.id });
-            return res.json({ message: "successfully updated", user: updatedUser });
+            return res.json( updatedUser );
         } else {
             await User.findByIdAndUpdate({ _id: req.params.id }, req.body);
             const updatedUser = await User.findOne({ _id: req.params.id });
-            return res.json({ message: "successfully updated", user: updatedUser });
+            return res.json( updatedUser );
         }
     } catch (err) {
         res.json({ message: err });
@@ -52,12 +52,11 @@ router.post('/signup', async (req, res) => {
         const user = new User(req.body)
         await user.save();
         const token = await user.generateAuthToken();
-        return res.status(200).json({ user });
+        return res.status(200).json(user);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 });
-
 router.post('/login', async (req, res) => {
     try {
         // Search for a user by email and password.
@@ -122,10 +121,10 @@ router.get('/physicians', async (req, res) => {
 // delete a physician using user id
 router.delete('/physicians/:id', async (req, res) => {
     try {
-
-        const deletedPhysician = await User.findOne({ _id: req.params.id });
         await User.findByIdAndDelete({ _id: req.params.id });
-        return res.status(200).json(deletedPhysician);
+        const physicians = await User.find({ type: "phy" });
+
+        return res.status(200).json(physicians);
 
     } catch (error) {
         res.status(400).send(error)

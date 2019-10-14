@@ -51,7 +51,7 @@ router.put('/update/:id', async (req, res) => {
     
             await Product.findByIdAndUpdate({ _id: req.params.id }, req.body);
             const _afterProduct = await Product.findOne({ _id: req.params.id });
-            return res.json({ message: "successfully updated", product: _afterProduct });
+            return res.json(_afterProduct);
         
     } catch (err) {
         return res.json({ message: err });
