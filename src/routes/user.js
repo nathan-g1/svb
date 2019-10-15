@@ -70,7 +70,7 @@ router.post('/login', async (req, res) => {
             return res.status(200).json({ error: 'Invalid login credentials' })
         }
         const token = await user.generateAuthToken();
-        return res.json({ user });
+        return res.json( user );
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -86,25 +86,7 @@ router.post('/logout', async (req, res) => {
 
 });
 
-// add new physicians 
-router.post('/add/physician', upload.single('image'), async (req, res) => {
-    try {
-        const user = new User({
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            password: req.body.password,
-            type: "phy",
-            email: req.body.email,
-            phone: req.body.phone,
-            image: req.file.path,
-        });
-        await user.save();
-        const token = await user.generateAuthToken();
-        res.status(200).json({ user: user, token: token });
-    } catch (error) {
-        res.status(400).send(error)
-    }
-});
+
 
 // get all physicians fro admin
 router.get('/physicians', async (req, res) => {

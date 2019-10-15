@@ -32,10 +32,9 @@ router.post('/add', upload.array('productImages', 5), async (req, res) => {
     }
     req.body.image = imagePath;
     const product = new Product(req.body);
-    console.log(product);
     try {
         const newProduct = await product.save();
-        return res.json({ message: "successfully added", product: newProduct });
+        return res.json(newProduct );
     } catch (err) {
         return res.json({ message: err });
     }

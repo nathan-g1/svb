@@ -6,7 +6,7 @@ const Subscription = require('../model/Subscription');
 // get all subscibed emails
 router.get('/', async (req, res) => {
     const emails = await Subscription.find();
-    return res.json({ message: "All emails on subcription list", emails });
+    return res.json( emails );
 });
 
 // subscirbe for news letters and update

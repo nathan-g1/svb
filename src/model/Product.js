@@ -5,7 +5,7 @@ const ProductSchema = mongoose.Schema({
         required: true
     },
     price: {
-        type: Number,
+        type: String,
         required: true
     }
     , description: {
@@ -14,7 +14,7 @@ const ProductSchema = mongoose.Schema({
     },
     type: {
         type: String,//either lns or frm
-        required: true
+        required: false
     },
     model: {
         type: String,
@@ -22,12 +22,12 @@ const ProductSchema = mongoose.Schema({
     },
     available: {
         type: Boolean,
-        required: true,
+        required: false,
         default: true
     },
     image: {
         type: [String], // a product may have multiple images
-        required: true
+        required: false
     }
 });
 
