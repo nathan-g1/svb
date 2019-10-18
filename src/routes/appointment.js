@@ -4,18 +4,23 @@ const Appointment = require('../model/Appointment');
 // ===========================================================================================
 // check current users login status/type/session for all the http methods using a middleware |
 // ===========================================================================================
-router.get('/', async (req, res) => {
+router.get('/:bool', async (req, res) => {
     // requires the front-end to send the type of the user
     console.log('request to all the appointments');
     try {
-        // if (Object.keys(req.body).length === 0) {
-        //     return res.json({ message: 'operation not allowed for unauthorized user' });
-        // }
-        // if (req.body.user.type !== 'phy') {
-        //     return res.json({ message: 'operation not allowed for this user' });
-        // }
-        const appointments = await Appointment.find({ "booked": false });
-        return res.json(appointments);
+        if (req.params.bool === 'none') {
+            const appointments = await Appointment.find();
+            return res.json(appointments);
+        }
+        if (req.params.bool === 'true') {
+            const appointments = await Appointment.find({ "booked": true });
+            return res.json(appointments);
+        }
+        if (req.params.bool === 'false') {
+            const appointments = await Appointment.find({ "booked": false });
+            return res.json(appointments);
+        }
+        return res.json({ message: 'wrong URL path' });
     } catch (err) {
         return res.send({ message: err });
     }
