@@ -30,6 +30,10 @@ const AppointmentSchema = mongoose.Schema({
         type: Boolean,
         require: true,
         default: false
+    },
+    physicianName: {
+        type: String,
+        require: true
     }
 });
 
