@@ -15,7 +15,7 @@ router.get('/all/:bool', async (req, res) => {
             return res.json(appointments);
         }
         if (req.params.bool === 'true') {
-            const appointments = await Appointment.find({ "booked": true });
+            const appointments = await Appointment.find();
             return res.json(appointments);
         }
         if (req.params.bool === 'false') {
@@ -31,11 +31,11 @@ router.post('/add', async (req, res) => {
     // requires the front-end to send the user object
     const newAppointment = new Appointment({
         physicianId: req.body.id,
-        startingHour: req.body.startingHour,
-        finishingHour: req.body.finishingHour,
         note: req.body.note,
-        physician: null,
-        physicianName: req.body.physicianName
+        physicianName: req.body.physicianName,
+        shift: req.body.shift,
+        date: new Date(req.body.date),
+        patientNumber: req.body.patientNumber
     });
     try {
         const _appointmnet = await newAppointment.save();
@@ -48,10 +48,19 @@ router.post('/add', async (req, res) => {
 router.put('/book/:id', async (req, res) => {
     console.log(`booking patient on appointment`);
     try {
-        if (req.body.user.type !== 'ptn') {
-            return res.json({ message: 'operation not allowed for this user' });
+        const userIdArr = await Appointment.findOne({ _id: req.params.id });
+        const ar = userIdArr.patientId;
+        const book = false;
+        if (!ar.includes(req.body.userId)) {
+            ar.push(req.body.userId);
         }
-        const _bookedAppointment = req.body.appointment.booked = true;
+        if (ar.length === userIdArr.patientNumber) {
+            book = true;
+        }
+        const _bookedAppointment = {
+            booked: book,
+            patientId: ar
+        }
         await Appointment.findByIdAndUpdate({ _id: req.params.id }, _bookedAppointment);
         const bookedAppointment = await Appointment.findOne({ _id: req.params.id });
         return res.json(bookedAppointment);
@@ -60,6 +69,31 @@ router.put('/book/:id', async (req, res) => {
     }
 });
 
+// searches appointments using appointmentId and deletes booked appointments
+router.put('/undo/book/:id', async (req, res) => {
+    console.log(`undo booking from appointment`);
+    try {
+        const userIdArr = await Appointment.findOne({ _id: req.params.id });
+        const ar = userIdArr.patientId;
+        const book = false;
+        const index = ar.indexOf(req.body.userId);
+        if (index > -1) {
+            ar.splice(index, 1);
+        }
+        if (ar.length === userIdArr.patientNumber) {
+            book = true;
+        }
+        const _bookedAppointment = {
+            booked: book,
+            patientId: ar
+        }
+        await Appointment.findByIdAndUpdate({ _id: req.params.id }, _bookedAppointment);
+        const bookedAppointment = await Appointment.findOne({ _id: req.params.id });
+        return res.json(bookedAppointment);
+    } catch (err) {
+        return res.send({ message: err });
+    }
+});
 
 // get appointment by appointment id
 router.get('/:id', async (req, res) => {
