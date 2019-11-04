@@ -6,11 +6,7 @@ const AppointmentSchema = mongoose.Schema({
         type: String,
         require: true
     },
-    startingHour: {
-        type: String,
-        require: true
-    },
-    finishingHour: {
+    date: {
         type: String,
         require: true
     },
@@ -18,12 +14,16 @@ const AppointmentSchema = mongoose.Schema({
         type: String,
         require: false
     },
-    patientId: {
-        type: String,
+    patientNumber: {
+        type: Number,
         require: false
     },
-    selectedHour: {
-        type: Date,
+    patientId: {
+        type: [String],
+        require: false
+    },
+    shift: {
+        type: String,
         require: false
     },
     booked: {
