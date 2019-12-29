@@ -36,9 +36,8 @@ router.get('/cart/:id', async (req, res) => {
 router.post('/add/', async (req, res) => {
     const order = new Order({
         quantity: req.body.quantity,
-        productId: req.body.productId,
         productData: req.body.productData,
-        userId: req.body.userId,
+        userInfo: req.body.userInfo,
         description: req.body.description
     });
     try {

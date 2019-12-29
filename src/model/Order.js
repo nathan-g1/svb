@@ -13,8 +13,8 @@ const OrderSchema = mongoose.Schema({
       type: Object,
       require: true
    },
-   userId: {
-      type: String,
+   userInfo: {
+      type: Object,
       require: true
    },
    description: {
