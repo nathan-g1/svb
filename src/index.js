@@ -18,13 +18,19 @@ app.use(express.json());
 //   .then(() => console.log("Connected to MongoDB..."))
 //   .catch(err => console.error("Could not connect to MongoDB..."));
 
-
-mongoose.connect(process.env.DB_CONN_LOCAL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false
-});
+mongoose.connect('mongodb+srv://nathan:samvisiondb@cluster0-bdysp.azure.mongodb.net/test?retryWrites=true&w=majority',
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+    }
+);
+// mongoose.connect(process.env.DB_CONNECTION, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     useCreateIndex: true,
+//     useFindAndModify: false
+// });
 
 const userRoute = require('./routes/user');
 const orderRoute = require('./routes/order');
