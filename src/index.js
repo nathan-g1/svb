@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 app.use('/images', express.static(path.join(__dirname, '../src/images')));
 const cors = require("cors");
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
 require('dotenv/config');
 app.use(express.json());
