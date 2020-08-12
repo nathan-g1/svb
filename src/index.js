@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 app.use('/images', express.static(path.join(__dirname, '../src/images')));
 const cors = require("cors");
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3003;
 const mongoose = require('mongoose');
 require('dotenv/config');
 app.use(express.json());
@@ -37,6 +37,7 @@ const orderRoute = require('./routes/order');
 const productRoute = require('./routes/product');
 const appointmentRoute = require('./routes/appointment');
 const subscriptionRoute = require('./routes/subscribe');
+const dagimcoffee = require('./routes/dagimcoffee');
 
 /*
     middleware for express that is used to enable [CORS]
@@ -51,6 +52,7 @@ app.use('/orders', orderRoute);
 app.use('/products', productRoute);
 app.use('/appointments', appointmentRoute);
 app.use('/subscriptions', subscriptionRoute);
+app.use('/emails', dagimcoffee);
 
 app.get('/', function (req, res) {
     //return the date the server starts
