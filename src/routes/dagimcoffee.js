@@ -53,6 +53,15 @@ router.post('/send', async (req, res) => {
     }
 });
 
+router.post('/contact/us', async (req, res) => {
+    const info = req.body;
+    try {
+        const messageId = await contact(info).catch(console.error);
+        return res.json(messageId);
+    } catch (err) {
+        return res.send({ message: err });
+    }
+});
 
 const customHthtml = function(payload) {
     return `
