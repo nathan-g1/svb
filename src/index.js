@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 app.use('/images', express.static(path.join(__dirname, '../src/images')));
+app.use('/thumbs', express.static(path.join(__dirname, '../images')));
 const cors = require("cors");
 const PORT = process.env.PORT || 3000;
 const mongoose = require('mongoose');
