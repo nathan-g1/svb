@@ -39,6 +39,7 @@ const productRoute = require('./routes/product');
 const appointmentRoute = require('./routes/appointment');
 const subscriptionRoute = require('./routes/subscribe');
 const dagimcoffee = require('./routes/dagimcoffee');
+const thumb = require('./routes/thumb');
 
 /*
     middleware for express that is used to enable [CORS]
@@ -54,6 +55,7 @@ app.use('/products', productRoute);
 app.use('/appointments', appointmentRoute);
 app.use('/subscriptions', subscriptionRoute);
 app.use('/emails', dagimcoffee);
+app.use('/images', thumb);
 
 app.get('/', function (req, res) {
     //return the date the server starts
