@@ -49,6 +49,49 @@ async function main(payload, contractCount) {
 
 }
 
+async function verifier(payload) {
+    let testAccount = await nodemailer.createTestAccount();
+
+    let transporter = nodemailer.createTransport({
+        host: "smtp-mail.outlook.com",
+        secureConnection: false, 
+        port: 587,    
+        // secureConnection: false, // TLS requires secureConnection to be false
+        // port: 587, // port for secure SMTP
+        auth: {
+            user: payload.email,
+            pass: payload.password
+        },
+        tls: {
+            ciphers:'SSLv3'
+        }
+    });
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+        from: `"${payload.senderName}" <${payload.email}>`, // sender address
+        to: `${payload.destination}`, // list of receivers
+        subject: payload.subject, // Subject line
+        text: payload.content, // plain text body
+        html: payload.html, // html body
+    });
+
+    console.log("Message sent: %s", info.messageId);
+    // Preview only available when sending through an Ethereal account
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    return info.messageId;
+}
+
+
+router.post('/verify', async (req, res) => {
+    const info = req.body;
+    try {
+        const verify = await verifier(info).catch(console.error);
+        return res.send({success: true, messageId: verify, message: 'Email sent!'});
+    } catch(err) {
+        return res.send({message: err});
+    }
+});
+
 
 async function contact(payload) {
     let testAccount = await nodemailer.createTestAccount();
